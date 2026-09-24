@@ -1,44 +1,44 @@
 {
   "rules": {
     "users": {
-      ".read": "auth != null",
-      ".write": "auth != null"
+      ".read": true,
+      ".write": true
     },
     "orders": {
       ".read": true,
-      ".write": "auth != null"
+      ".write": true
     },
     "generators": {
       ".read": true,
-      ".write": "root.child('users').child(auth.uid).child('role').val() === 'owner' || auth != null"
+      ".write": true
     },
     "spareParts": {
       ".read": true,
-      ".write": "root.child('users').child(auth.uid).child('role').val() === 'owner' || auth != null"
+      ".write": true
     },
     "leases": {
-      ".read": "auth != null",
-      ".write": "auth != null"
+      ".read": true,
+      ".write": true
     },
     "purchases": {
-      ".read": "auth != null",
-      ".write": "auth != null"
+      ".read": true,
+      ".write": true
     },
     "services": {
-      ".read": "auth != null",
-      ".write": "auth != null"
+      ".read": true,
+      ".write": true
     },
     "sparePartOrders": {
-      ".read": "auth != null",
-      ".write": "auth != null"
+      ".read": true,
+      ".write": true
     },
     "carts": {
-      ".read": "auth != null",
-      ".write": "auth != null"
+      ".read": true,
+      ".write": true
     },
     "settings": {
       ".read": true,
-      ".write": "root.child('users').child(auth.uid).child('role').val() === 'owner'"
+      ".write": true
     }
   }
 }
