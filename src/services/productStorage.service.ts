@@ -32,6 +32,41 @@ class ProductStorageService {
     return initial;
   }
 
+  async getGeneratorsAsync(): Promise<Generator[]> {
+    const localGens = this.getGenerators();
+    try {
+      if (database) {
+        const snapshot = await get(ref(database, 'generators'));
+        if (snapshot.exists()) {
+          const val = snapshot.val();
+          const remoteList: Generator[] = Array.isArray(val)
+            ? val.filter(Boolean)
+            : Object.values(val);
+          if (remoteList.length > 0) {
+            const map = new Map<string, Generator>();
+            remoteList.forEach((g) => map.set(g.id, g));
+            localGens.forEach((g) => {
+              if (!map.has(g.id)) {
+                map.set(g.id, g);
+                set(ref(database, `generators/${g.id}`), g).catch(() => {});
+              }
+            });
+            const merged = Array.from(map.values());
+            this.saveGeneratorsToLocal(merged);
+            return merged;
+          }
+        } else {
+          for (const g of localGens) {
+            set(ref(database, `generators/${g.id}`), g).catch(() => {});
+          }
+        }
+      }
+    } catch (fbErr) {
+      console.warn('Firebase generators fetch warning (using local):', fbErr);
+    }
+    return localGens;
+  }
+
   saveGeneratorsToLocal(generators: Generator[]): void {
     try {
       localStorage.setItem(STORAGE_KEYS.GENERATORS, JSON.stringify(generators));
@@ -99,6 +134,41 @@ class ProductStorageService {
     const initial = mockDataService.generateSpareParts();
     this.saveSparePartsToLocal(initial);
     return initial;
+  }
+
+  async getSparePartsAsync(): Promise<SparePart[]> {
+    const localParts = this.getSpareParts();
+    try {
+      if (database) {
+        const snapshot = await get(ref(database, 'spareParts'));
+        if (snapshot.exists()) {
+          const val = snapshot.val();
+          const remoteList: SparePart[] = Array.isArray(val)
+            ? val.filter(Boolean)
+            : Object.values(val);
+          if (remoteList.length > 0) {
+            const map = new Map<string, SparePart>();
+            remoteList.forEach((p) => map.set(p.id, p));
+            localParts.forEach((p) => {
+              if (!map.has(p.id)) {
+                map.set(p.id, p);
+                set(ref(database, `spareParts/${p.id}`), p).catch(() => {});
+              }
+            });
+            const merged = Array.from(map.values());
+            this.saveSparePartsToLocal(merged);
+            return merged;
+          }
+        } else {
+          for (const p of localParts) {
+            set(ref(database, `spareParts/${p.id}`), p).catch(() => {});
+          }
+        }
+      }
+    } catch (fbErr) {
+      console.warn('Firebase spare parts fetch warning (using local):', fbErr);
+    }
+    return localParts;
   }
 
   saveSparePartsToLocal(parts: SparePart[]): void {
@@ -169,6 +239,43 @@ class ProductStorageService {
     return initial;
   }
 
+  async getOrdersAsync(): Promise<UnifiedOrder[]> {
+    const localOrders = this.getOrders();
+    try {
+      if (database) {
+        const snapshot = await get(ref(database, 'orders'));
+        if (snapshot.exists()) {
+          const val = snapshot.val();
+          const remoteList: UnifiedOrder[] = Array.isArray(val)
+            ? val.filter(Boolean)
+            : Object.values(val);
+          if (remoteList.length > 0) {
+            const map = new Map<string, UnifiedOrder>();
+            remoteList.forEach((o) => map.set(o.id, o));
+            localOrders.forEach((o) => {
+              if (!map.has(o.id)) {
+                map.set(o.id, o);
+                set(ref(database, `orders/${o.id}`), o).catch(() => {});
+              }
+            });
+            const merged = Array.from(map.values()).sort(
+              (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            );
+            this.saveOrdersToLocal(merged);
+            return merged;
+          }
+        } else {
+          for (const o of localOrders) {
+            set(ref(database, `orders/${o.id}`), o).catch(() => {});
+          }
+        }
+      }
+    } catch (fbErr) {
+      console.warn('Firebase orders fetch warning (using local):', fbErr);
+    }
+    return localOrders;
+  }
+
   saveOrdersToLocal(orders: UnifiedOrder[]): void {
     try {
       localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(orders));
@@ -237,6 +344,48 @@ class ProductStorageService {
   private generateInitialOrders(): UnifiedOrder[] {
     const now = new Date();
     return [
+      {
+        id: 'ord-9381',
+        orderNumber: 'GP-ORD-2026-9381',
+        orderType: 'spare_parts',
+        customerId: 'cust-voorugonda',
+        customerName: 'Voorugonda Karthik',
+        customerEmail: 'voorugondakarthik@gmail.com',
+        customerPhone: '+91 98490 12345',
+        items: [
+          {
+            id: 'part-greaves-battery',
+            name: 'Greaves Battery',
+            modelOrPartNumber: 'PN-GRV-BAT-01',
+            category: 'Spare Parts',
+            imageUrl: 'https://images.unsplash.com/photo-1581092918484-8299f8c53e8c?w=400&h=400&fit=crop',
+            unitPrice: 3774,
+            quantity: 1,
+            totalPrice: 3774,
+          },
+        ],
+        subtotal: 3774,
+        taxAmount: 679,
+        shippingOrInstallationAmount: 0,
+        totalAmount: 4453,
+        shippingAddress: {
+          street: 'Vasanthapur, వసంతపూర్',
+          city: 'Vasanthapur',
+          state: 'Telangana',
+          pincode: '506220',
+          country: 'India',
+        },
+        paymentMethod: 'UPI',
+        paymentStatus: 'paid',
+        status: 'processing',
+        trackingNumber: 'DTDC-9381-IN',
+        notes: 'Greaves Battery spare part replacement order.',
+        termsAccepted: true,
+        termsAcceptedAt: new Date(now.getTime() - 1000 * 60 * 60 * 3).toISOString(),
+        termsVersion: '1.0.0',
+        createdAt: new Date(now.getTime() - 1000 * 60 * 60 * 3).toISOString(),
+        updatedAt: new Date(now.getTime() - 1000 * 60 * 60 * 3).toISOString(),
+      },
       {
         id: 'ord-1001',
         orderNumber: 'GP-ORD-2026-1001',

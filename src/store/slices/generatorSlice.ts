@@ -15,7 +15,7 @@ export const fetchGenerators = createAsyncThunk(
   'generators/fetchAll',
   async (_, { rejectWithValue }) => {
     try {
-      const generators = productStorageService.getGenerators();
+      const generators = await productStorageService.getGeneratorsAsync();
       return generators;
     } catch (error) {
       return rejectWithValue((error as Error).message);

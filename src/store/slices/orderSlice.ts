@@ -22,7 +22,7 @@ export const fetchOrders = createAsyncThunk(
   'orders/fetchAll',
   async (_, { rejectWithValue }) => {
     try {
-      const orders = productStorageService.getOrders();
+      const orders = await productStorageService.getOrdersAsync();
       return orders;
     } catch (error) {
       return rejectWithValue((error as Error).message);

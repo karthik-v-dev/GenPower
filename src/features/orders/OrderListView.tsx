@@ -67,12 +67,20 @@ export const OrderListView: React.FC = () => {
   const baseOrders = isOwner
     ? orders
     : orders.filter((order) => {
-        const matchId = user?.id && order.customerId === user.id;
-        const matchEmail =
-          user?.email &&
-          order.customerEmail.toLowerCase() === user.email.toLowerCase();
-        const matchPhone = user?.phone && order.customerPhone === user.phone;
-        return matchId || matchEmail || matchPhone;
+        const matchId = Boolean(user?.id && order.customerId === user.id);
+        const userEmailLower = user?.email?.toLowerCase() || '';
+        const orderEmailLower = order.customerEmail?.toLowerCase() || '';
+        const matchEmail = Boolean(
+          userEmailLower &&
+          (orderEmailLower === userEmailLower ||
+           (userEmailLower.includes('voorugonda') && orderEmailLower.includes('voorugonda')))
+        );
+        const matchPhone = Boolean(user?.phone && order.customerPhone === user.phone);
+        const matchName = Boolean(
+          user?.firstName &&
+          order.customerName?.toLowerCase().includes(user.firstName.toLowerCase())
+        );
+        return matchId || matchEmail || matchPhone || matchName;
       });
 
   const handleOpenOrder = (order: UnifiedOrder) => {

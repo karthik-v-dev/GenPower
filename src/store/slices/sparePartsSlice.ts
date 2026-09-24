@@ -15,7 +15,7 @@ export const fetchSpareParts = createAsyncThunk(
   'spareParts/fetchAll',
   async (_, { rejectWithValue }) => {
     try {
-      const parts = productStorageService.getSpareParts();
+      const parts = await productStorageService.getSparePartsAsync();
       return parts;
     } catch (error) {
       return rejectWithValue((error as Error).message);

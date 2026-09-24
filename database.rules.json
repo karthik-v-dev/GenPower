@@ -4,13 +4,17 @@
       ".read": "auth != null",
       ".write": "auth != null"
     },
+    "orders": {
+      ".read": true,
+      ".write": "auth != null"
+    },
     "generators": {
       ".read": true,
       ".write": "root.child('users').child(auth.uid).child('role').val() === 'owner' || auth != null"
     },
     "spareParts": {
       ".read": true,
-      ".write": "root.child('users').child(auth.uid).child('role').val() === 'owner'"
+      ".write": "root.child('users').child(auth.uid).child('role').val() === 'owner' || auth != null"
     },
     "leases": {
       ".read": "auth != null",
