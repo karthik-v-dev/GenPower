@@ -256,6 +256,7 @@ export const DashboardPage: React.FC = () => {
               <Button
                 variant="contained"
                 startIcon={<AddIcon />}
+
                 onClick={handleOpenAddSparePart}
                 sx={{
                   backgroundColor: '#10b981',
