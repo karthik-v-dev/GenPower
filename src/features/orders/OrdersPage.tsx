@@ -35,15 +35,29 @@ export const OrdersPage: React.FC = () => {
   if (!isAuthenticated) {
     return (
       <Container maxWidth="md" sx={{ py: 8 }}>
-        <Paper elevation={2} sx={{ p: 5, textAlign: 'center', borderRadius: 3 }}>
-          <ShoppingBagIcon color="primary" sx={{ fontSize: 64, mb: 2 }} />
-          <Typography variant="h4" fontWeight={700} gutterBottom>
+        <Paper elevation={2} sx={{ p: { xs: 3, sm: 5 }, textAlign: 'center', borderRadius: 3 }}>
+          <ShoppingBagIcon color="primary" sx={{ fontSize: { xs: 48, sm: 64 }, mb: 2 }} />
+          <Typography
+            variant="h4"
+            fontWeight={700}
+            gutterBottom
+            sx={{ fontSize: { xs: '1.35rem', sm: '1.8rem', md: '2.125rem' } }}
+          >
             Sign in to view your Order History
           </Typography>
-          <Typography variant="body1" color="text.secondary" paragraph>
+          <Typography variant="body1" color="text.secondary" paragraph sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}>
             Please log in with your registered account to track your orders, view order summaries, and access warranty and service schedules.
           </Typography>
-          <Box sx={{ mt: 3, display: 'flex', gap: 2, justifyContent: 'center' }}>
+          <Box
+            sx={{
+              mt: 3,
+              display: 'flex',
+              flexDirection: { xs: 'column', sm: 'row' },
+              gap: 1.5,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
             <Button
               variant="contained"
               startIcon={<LoginIcon />}
@@ -51,14 +65,26 @@ export const OrdersPage: React.FC = () => {
                 sessionStorage.setItem('redirectAfterLogin', ROUTES.ORDERS);
                 navigate(ROUTES.LOGIN);
               }}
-              size="large"
+              size="medium"
+              sx={{
+                width: { xs: '100%', sm: 'auto' },
+                minWidth: { sm: 180 },
+                py: { xs: 1, sm: 1.25 },
+                fontWeight: 600,
+              }}
             >
               Login to GenPower
             </Button>
             <Button
               variant="outlined"
               onClick={() => navigate(ROUTES.REGISTER)}
-              size="large"
+              size="medium"
+              sx={{
+                width: { xs: '100%', sm: 'auto' },
+                minWidth: { sm: 180 },
+                py: { xs: 1, sm: 1.25 },
+                fontWeight: 600,
+              }}
             >
               Create New Account
             </Button>
@@ -97,10 +123,16 @@ export const OrdersPage: React.FC = () => {
         }}
       >
         <Box>
-          <Typography variant="h4" component="h1" fontWeight={700} gutterBottom>
+          <Typography
+            variant="h4"
+            component="h1"
+            fontWeight={700}
+            gutterBottom
+            sx={{ fontSize: { xs: '1.35rem', sm: '1.75rem', md: '2.125rem' } }}
+          >
             {isOwner ? 'Orders & Fulfillment Management (Store Owner)' : 'My Orders & Order History'}
           </Typography>
-          <Typography variant="body1" color="text.secondary">
+          <Typography variant="body1" color="text.secondary" sx={{ fontSize: { xs: '0.88rem', sm: '1rem' } }}>
             {isOwner
               ? 'Complete overview of all incoming customer generator purchases, rental leases, and spare parts orders.'
               : `Welcome back, ${user?.firstName || 'Valued Customer'}. Track your orders, delivery status, and view order summaries.`}

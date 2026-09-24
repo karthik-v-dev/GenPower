@@ -19,6 +19,7 @@ import {
   CardContent,
   IconButton,
   Tooltip,
+  Divider,
 } from '@mui/material';
 import {
   Search as SearchIcon,
@@ -355,8 +356,167 @@ export const OrderListView: React.FC = () => {
         </Grid>
       </Paper>
 
-      {/* Orders Table */}
-      <TableContainer component={Paper} sx={{ borderRadius: 2, overflow: 'hidden' }}>
+      {/* Mobile Orders Card View (Each row shown as one card on mobile) */}
+      <Box sx={{ display: { xs: 'flex', md: 'none' }, flexDirection: 'column', gap: 2 }}>
+        {filteredOrders.length === 0 ? (
+          <Paper elevation={1} sx={{ p: 4, textAlign: 'center', borderRadius: 2 }}>
+            <OrdersIcon sx={{ fontSize: 48, color: 'text.disabled', mb: 1 }} />
+            <Typography variant="body1" fontWeight={600}>
+              {isOwner
+                ? 'No orders found matching the filter.'
+                : 'You have not placed any orders matching this filter.'}
+            </Typography>
+            {!isOwner && (
+              <Box sx={{ mt: 2, display: 'flex', gap: 1.5, justifyContent: 'center', flexWrap: 'wrap' }}>
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={() => navigate(ROUTES.GENERATORS)}
+                >
+                  Explore Generators
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => navigate(ROUTES.SPARE_PARTS)}
+                >
+                  Browse Spare Parts
+                </Button>
+              </Box>
+            )}
+          </Paper>
+        ) : (
+          filteredOrders.map((order) => (
+            <Card
+              key={order.id}
+              elevation={2}
+              sx={{
+                borderRadius: 2.5,
+                border: (t) =>
+                  `1px solid ${t.palette.mode === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}`,
+                overflow: 'hidden',
+                transition: 'box-shadow 0.2s ease',
+              }}
+            >
+              <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
+                {/* Header: Order Number, Date, Status */}
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
+                  <Box>
+                    <Typography
+                      variant="subtitle2"
+                      fontWeight={700}
+                      color="primary.main"
+                      sx={{ fontSize: '0.92rem', cursor: 'pointer' }}
+                      onClick={() => handleOpenOrder(order)}
+                    >
+                      {order.orderNumber}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {new Date(order.createdAt).toLocaleDateString()} at{' '}
+                      {new Date(order.createdAt).toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ textAlign: 'right' }}>
+                    <Chip
+                      label={order.status.toUpperCase()}
+                      size="small"
+                      color={getStatusChipColor(order.status)}
+                      sx={{ fontWeight: 700, fontSize: '0.72rem' }}
+                    />
+                  </Box>
+                </Box>
+
+                <Divider sx={{ my: 1 }} />
+
+                {/* Details Section */}
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, my: 1 }}>
+                  {/* Order Type */}
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                      TYPE
+                    </Typography>
+                    {getOrderTypeBadge(order.orderType)}
+                  </Box>
+
+                  {/* Items */}
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <Typography variant="caption" color="text.secondary" fontWeight={600} sx={{ minWidth: 60 }}>
+                      ITEMS
+                    </Typography>
+                    <Typography variant="body2" fontWeight={600} align="right" sx={{ flex: 1, ml: 1 }}>
+                      {order.items.map((i) => `${i.name} (x${i.quantity})`).join(', ')}
+                    </Typography>
+                  </Box>
+
+                  {/* Destination / Customer */}
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <Typography variant="caption" color="text.secondary" fontWeight={600} sx={{ minWidth: 60 }}>
+                      {isOwner ? 'CUSTOMER' : 'DELIVERY'}
+                    </Typography>
+                    <Box sx={{ textAlign: 'right', flex: 1, ml: 1 }}>
+                      {isOwner ? (
+                        <>
+                          <Typography variant="body2" fontWeight={600}>
+                            {order.customerName}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            {order.customerPhone}
+                          </Typography>
+                        </>
+                      ) : (
+                        <>
+                          <Typography variant="body2" fontWeight={600}>
+                            {order.shippingAddress.street ? `${order.shippingAddress.street}, ` : ''}
+                            {order.shippingAddress.city}, {order.shippingAddress.state}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            PIN: {order.shippingAddress.pincode}
+                          </Typography>
+                        </>
+                      )}
+                    </Box>
+                  </Box>
+
+                  {/* Total Amount */}
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pt: 0.5 }}>
+                    <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                      TOTAL AMOUNT
+                    </Typography>
+                    <Typography variant="subtitle1" fontWeight={800} color="primary.main">
+                      ₹{order.totalAmount.toLocaleString('en-IN')}
+                    </Typography>
+                  </Box>
+                </Box>
+
+                <Divider sx={{ my: 1 }} />
+
+                {/* Card Action Button */}
+                <Box sx={{ mt: 1.5 }}>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<VisibilityIcon />}
+                    onClick={() => handleOpenOrder(order)}
+                    fullWidth
+                    sx={{ py: 0.75, fontWeight: 600, borderRadius: 1.5, textTransform: 'none' }}
+                  >
+                    View Order Summary
+                  </Button>
+                </Box>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </Box>
+
+      {/* Desktop Orders Table (Hidden on Mobile xs & sm, visible on md and up) */}
+      <TableContainer
+        component={Paper}
+        sx={{ display: { xs: 'none', md: 'block' }, borderRadius: 2, overflow: 'hidden' }}
+      >
         <Table>
           <TableHead sx={{ backgroundColor: (t) => (t.palette.mode === 'dark' ? '#141e33' : '#f8fafc') }}>
             <TableRow>

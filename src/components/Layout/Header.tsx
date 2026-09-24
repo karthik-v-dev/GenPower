@@ -149,20 +149,63 @@ export const Header = (): React.ReactElement => {
           );
         })}
       </List>
+      <Divider />
+      {!isAuthenticated ? (
+        <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={() => {
+              handleDrawerToggle();
+              navigate(ROUTES.LOGIN);
+            }}
+          >
+            Login
+          </Button>
+          <Button
+            variant="outlined"
+            fullWidth
+            onClick={() => {
+              handleDrawerToggle();
+              navigate(ROUTES.REGISTER);
+            }}
+          >
+            Register
+          </Button>
+        </Box>
+      ) : (
+        <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
+          <Typography variant="caption" color="text.secondary" sx={{ px: 1, wordBreak: 'break-word' }}>
+            {user?.email}
+          </Typography>
+          <Button
+            variant="outlined"
+            color="error"
+            fullWidth
+            startIcon={<Logout />}
+            onClick={() => {
+              handleDrawerToggle();
+              handleLogout();
+            }}
+          >
+            Logout
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 
   return (
     <>
       <AppBar position="sticky" elevation={1}>
-        <Toolbar sx={{ px: { xs: 2, md: 3 } }}>
+        <Toolbar sx={{ px: { xs: 1, sm: 2, md: 3 } }}>
           {isMobile && (
             <IconButton
               color="inherit"
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
-              sx={{ mr: 1.5 }}
+              sx={{ mr: { xs: 0.5, sm: 1.5 } }}
             >
               <MenuIcon />
             </IconButton>
@@ -175,7 +218,8 @@ export const Header = (): React.ReactElement => {
               cursor: 'pointer',
               fontWeight: 800,
               letterSpacing: '-0.5px',
-              mr: 2,
+              mr: { xs: 1, sm: 2 },
+              fontSize: { xs: '1.1rem', sm: '1.25rem' },
             }}
             onClick={() => navigate(ROUTES.HOME)}
           >
@@ -214,12 +258,20 @@ export const Header = (): React.ReactElement => {
           <Box sx={{ flexGrow: 1 }} />
 
           <Tooltip title={getThemeTooltip()}>
-            <IconButton color="inherit" onClick={toggleTheme} sx={{ mr: 1 }}>
+            <IconButton
+              color="inherit"
+              onClick={toggleTheme}
+              sx={{ mr: { xs: 0.5, sm: 1 }, p: { xs: 0.75, sm: 1 } }}
+            >
               {getThemeIcon()}
             </IconButton>
           </Tooltip>
 
-          <IconButton color="inherit" onClick={() => navigate(ROUTES.CART)} sx={{ mr: 1 }}>
+          <IconButton
+            color="inherit"
+            onClick={() => navigate(ROUTES.CART)}
+            sx={{ mr: { xs: 0.5, sm: 1 }, p: { xs: 0.75, sm: 1 } }}
+          >
             <Badge badgeContent={cart.length} color="error">
               <ShoppingCart />
             </Badge>
@@ -234,6 +286,7 @@ export const Header = (): React.ReactElement => {
                 aria-haspopup="true"
                 onClick={handleMenu}
                 color="inherit"
+                sx={{ p: { xs: 0.75, sm: 1 } }}
               >
                 <AccountCircle />
               </IconButton>
@@ -279,14 +332,29 @@ export const Header = (): React.ReactElement => {
               </Menu>
             </>
           ) : (
-            <Box sx={{ display: 'flex', gap: 1 }}>
-              <Button color="inherit" onClick={() => navigate(ROUTES.LOGIN)}>
+            <Box sx={{ display: 'flex', gap: { xs: 0.5, sm: 1 }, alignItems: 'center' }}>
+              <Button
+                color="inherit"
+                size="small"
+                onClick={() => navigate(ROUTES.LOGIN)}
+                sx={{
+                  px: { xs: 1, sm: 1.5 },
+                  minWidth: { xs: 'auto', sm: '60px' },
+                  fontSize: { xs: '0.82rem', sm: '0.875rem' },
+                }}
+              >
                 Login
               </Button>
               <Button
                 variant="outlined"
                 color="inherit"
+                size="small"
                 onClick={() => navigate(ROUTES.REGISTER)}
+                sx={{
+                  display: { xs: 'none', sm: 'inline-flex' },
+                  px: { xs: 1, sm: 1.5 },
+                  fontSize: { xs: '0.82rem', sm: '0.875rem' },
+                }}
               >
                 Register
               </Button>

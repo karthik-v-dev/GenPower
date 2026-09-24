@@ -50,6 +50,42 @@ function AppContent(): React.ReactElement {
         },
         typography: {
           fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+          h1: {
+            '@media (max-width:600px)': {
+              fontSize: '1.75rem',
+              lineHeight: 1.25,
+            },
+          },
+          h2: {
+            '@media (max-width:600px)': {
+              fontSize: '1.5rem',
+              lineHeight: 1.3,
+            },
+          },
+          h3: {
+            '@media (max-width:600px)': {
+              fontSize: '1.35rem',
+              lineHeight: 1.3,
+            },
+          },
+          h4: {
+            '@media (max-width:600px)': {
+              fontSize: '1.25rem',
+              lineHeight: 1.35,
+            },
+          },
+          h5: {
+            '@media (max-width:600px)': {
+              fontSize: '1.1rem',
+              lineHeight: 1.4,
+            },
+          },
+          h6: {
+            '@media (max-width:600px)': {
+              fontSize: '1rem',
+              lineHeight: 1.4,
+            },
+          },
         },
         components: {
           MuiButton: {
@@ -57,6 +93,25 @@ function AppContent(): React.ReactElement {
               root: {
                 textTransform: 'none',
                 fontWeight: 600,
+                borderRadius: '6px',
+                '@media (max-width:600px)': {
+                  minHeight: '36px',
+                  padding: '6px 14px',
+                  fontSize: '0.85rem',
+                },
+              },
+              sizeLarge: {
+                padding: '10px 22px',
+                fontSize: '0.95rem',
+                '@media (max-width:600px)': {
+                  minHeight: '38px',
+                  padding: '7px 16px',
+                  fontSize: '0.85rem',
+                },
+              },
+              sizeSmall: {
+                padding: '4px 10px',
+                fontSize: '0.78rem',
               },
             },
           },

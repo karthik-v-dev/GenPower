@@ -172,8 +172,14 @@ export const ServicePage = (): React.ReactElement => {
   const selectedServiceType = SERVICE_TYPES.find((s) => s.value === formData.serviceType);
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Typography variant="h3" component="h1" gutterBottom fontWeight={700}>
+    <Container maxWidth="lg" sx={{ py: { xs: 2.5, sm: 4 } }}>
+      <Typography
+        variant="h3"
+        component="h1"
+        gutterBottom
+        fontWeight={700}
+        sx={{ fontSize: { xs: '1.45rem', sm: '2rem', md: '2.5rem' } }}
+      >
         Generator Service Request
       </Typography>
       
@@ -456,19 +462,29 @@ export const ServicePage = (): React.ReactElement => {
 
             {/* Submit Buttons */}
             <Grid item xs={12}>
-              <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  gap: 1.5,
+                  justifyContent: 'flex-end',
+                  flexDirection: { xs: 'column-reverse', sm: 'row' },
+                  width: '100%',
+                }}
+              >
                 <Button
                   variant="outlined"
-                  size="large"
+                  size="medium"
                   onClick={() => window.history.back()}
+                  sx={{ width: { xs: '100%', sm: 'auto' }, py: { xs: 0.9, sm: 1.25 } }}
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
                   variant="contained"
-                  size="large"
+                  size="medium"
                   disabled={!isAuthenticated}
+                  sx={{ width: { xs: '100%', sm: 'auto' }, py: { xs: 0.9, sm: 1.25 } }}
                 >
                   Submit Service Request
                 </Button>
