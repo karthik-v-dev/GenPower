@@ -1,0 +1,40 @@
+{
+  "rules": {
+    "users": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "generators": {
+      ".read": true,
+      ".write": "root.child('users').child(auth.uid).child('role').val() === 'owner' || auth != null"
+    },
+    "spareParts": {
+      ".read": true,
+      ".write": "root.child('users').child(auth.uid).child('role').val() === 'owner'"
+    },
+    "leases": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "purchases": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "services": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "sparePartOrders": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "carts": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "settings": {
+      ".read": true,
+      ".write": "root.child('users').child(auth.uid).child('role').val() === 'owner'"
+    }
+  }
+}
